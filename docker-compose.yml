@@ -1,12 +1,12 @@
-version: '3'
-services:
-  mongodb:
-    hostname: easytravel-mongodb
-    container_name: mongodb
-    image: "dynatrace/easytravel-mongodb"
-    ports:
-      - 27017
-      - 28017
+# version: '3'
+# services:
+#   mongodb:
+#     hostname: easytravel-mongodb
+#     container_name: mongodb
+#     image: "dynatrace/easytravel-mongodb"
+#     ports:
+#       - 27017
+#       - 28017
 
   backend:
     hostname: easytravel-backend
