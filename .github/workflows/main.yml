@@ -15,7 +15,7 @@ jobs:
     - name: Set Environment Variables
       run: |
         export DD_BETA_COMMANDS_ENABLED=1
-        export DD_SITE="app.datadoghq.com" # Replace with your Datadog site (e.g., datadoghq.com or datadoghq.eu)
+        export DD_SITE="https://app.datadoghq.com" # Replace with your Datadog site (e.g., datadoghq.com or datadoghq.eu)
         export DD_API_KEY="${{ secrets.DATADOG_API_KEY }}"
 
     - name: Start Deployment Timer
@@ -34,5 +34,5 @@ jobs:
           --git-commit-sha ${{ github.event.pull_request.head.sha }}
       env:
         DD_BETA_COMMANDS_ENABLED: 1
-        DD_SITE: "app.datadoghq.com"
+        DD_SITE: "https://app.datadoghq.com"
         DD_API_KEY: ${{ secrets.DATADOG_API_KEY }}
