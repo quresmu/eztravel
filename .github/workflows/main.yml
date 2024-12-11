@@ -34,5 +34,5 @@ jobs:
           --git-commit-sha ${{ github.event.pull_request.head.sha }}
       env:
         DD_BETA_COMMANDS_ENABLED: 1
-        DD_SITE: "<DD_SITE>"
+        DD_SITE: "app.datadoghq.com"
         DD_API_KEY: ${{ secrets.DATADOG_API_KEY }}
