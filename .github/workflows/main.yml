@@ -2,8 +2,7 @@ name: Deploy and Report to Datadog
 
 on:
   pull_request:
-    branches:
-      - main
+    branches: [ main ]
 
 jobs:
   deploy:
