@@ -1,4 +1,4 @@
-# name: Deploy and Report to Datadog
+# name: Datadog CI Installation
 
 # on:
 #   pull_request:
@@ -6,46 +6,36 @@
 #       - main
 
 # jobs:
-#   deploy:
+#   install-datadog-ci:
 #     runs-on: ubuntu-latest
 
 #     steps:
-#     - name: Checkout Code
-#       uses: actions/checkout@v3
+#       - name: Checkout repository
+#         uses: actions/checkout@v2
 
-#     - name: Set Environment Variables
-#       run: |
-#         export DD_BETA_COMMANDS_ENABLED=1
-#         export DD_SITE="app.datadoghq.com" # Replace with your Datadog site (e.g., datadoghq.com or datadoghq.eu)
-#         export DD_API_KEY="${{ secrets.DATADOG_API_KEY }}"
+#       - name: Set up Node.js
+#         uses: actions/setup-node@v2
+#         with:
+#           node-version: '14'
 
-#     - name: Start Deployment Timer
-#       id: deploy_start
-#       run: echo "deploy_start=$(date +%s)" >> $GITHUB_ENV
+#       - name: Install Datadog CI
+#         run: npm install -g @datadog/datadog-ci
 
-#     - name: Deploy Application
-#       run: |
-#         git update-index --chmod=+x ./your-deploy-script.sh
+#       - name: Configure Datadog keys
+#         run: |
+#           echo "DATADOG_API_KEY=${{ secrets.DATADOG_API_KEY }}" >> $GITHUB_ENV
+#           echo "DATADOG_APP_KEY=${{ secrets.DATADOG_APP_KEY }}" >> $GITHUB_ENV
 
-#     - name: Report Deployment to Datadog
-#       run: |
-#         datadog-ci dora deployment --service eztravel --env production \
-#           --started-at ${{ env.deploy_start }} --finished-at $(date +%s) \
-#           --git-repository-url "https://github.com/quresmu/eztravel" \
-#           --git-commit-sha ${{ github.event.pull_request.head.sha }}
-#       env:
-#         DD_BETA_COMMANDS_ENABLED: 1
-#         DD_SITE: "<DD_SITE>"
-#         DD_API_KEY: ${{ secrets.DATADOG_API_KEY }}
-name: Datadog CI Installation
+#       - name: Verify Datadog CI Installation
+#         run: datadog-ci --version
+name: Datadog PR Event
 
 on:
   pull_request:
-    branches:
-      - main
+    types: [opened, reopened, closed]
 
 jobs:
-  install-datadog-ci:
+  push-event-to-datadog:
     runs-on: ubuntu-latest
 
     steps:
@@ -64,6 +54,11 @@ jobs:
         run: |
           echo "DATADOG_API_KEY=${{ secrets.DATADOG_API_KEY }}" >> $GITHUB_ENV
           echo "DATADOG_APP_KEY=${{ secrets.DATADOG_APP_KEY }}" >> $GITHUB_ENV
+          echo "DD_BETA_COMMANDS_ENABLED=1" >> $GITHUB_ENV 
+          echo "DD_SITE=${{ secrets.DD_SITE }}" >> $GITHUB_ENV
 
-      - name: Verify Datadog CI Installation
-        run: datadog-ci --version
+      - name: Push deployment event to Datadog
+        run: |
+          deploy_start=$(date +%s)
+          datadog-ci dora deployment --service shopist --env prod --started-at $deploy_start --finished-at $(date +%s) --apiKey $DATADOG_API_KEY --appKey $DATADOG_APP_KEY
+
