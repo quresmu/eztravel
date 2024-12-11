@@ -25,7 +25,7 @@ jobs:
 
     - name: Deploy Application
       run: |
-        sudo ./your-deploy-script.sh
+        git update-index --chmod=+x ./your-deploy-script.sh
 
     - name: Report Deployment to Datadog
       run: |
