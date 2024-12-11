@@ -25,7 +25,7 @@ jobs:
 
     - name: Deploy Application
       run: |
-        ./your-deploy-script.sh
+        sudo ./your-deploy-script.sh
 
     - name: Report Deployment to Datadog
       run: |
