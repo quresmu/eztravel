@@ -1,31 +1,32 @@
 name: Deploy and Report to Datadog
-
 on:
   pull_request:
     branches: [ main ]
-
 jobs:
   deploy:
     runs-on: ubuntu-latest
-
     steps:
     - name: Checkout Code
       uses: actions/checkout@v3
-
+    
+    - name: Set up Node.js
+      uses: actions/setup-node@v3
+      with:
+        node-version: '18'  # You can specify the Node.js version you need
+    
+    - name: Install npm dependencies
+      run: npm ci  # This uses the package-lock.json to install exact versions
+    
     - name: Set Environment Variables
       run: |
         export DD_BETA_COMMANDS_ENABLED=1
         export DD_SITE="https://app.datadoghq.com" # Replace with your Datadog site (e.g., datadoghq.com or datadoghq.eu)
         export DD_API_KEY="${{ secrets.DATADOG_API_KEY }}"
-
+    
     - name: Start Deployment Timer
       id: deploy_start
       run: echo "deploy_start=$(date +%s)" >> $GITHUB_ENV
-
-    - name: Deploy Application
-      run: |
-        ./your-deploy-script.sh
-
+    
     - name: Report Deployment to Datadog
       run: |
         datadog-ci dora deployment --service eztravel --env production \
