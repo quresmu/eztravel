@@ -60,5 +60,5 @@ jobs:
       - name: Push deployment event to Datadog
         run: |
           deploy_start=$(date +%s)
-          datadog-ci dora deployment --service shopist --env prod --started-at $deploy_start --finished-at $(date +%s) --apiKey $DATADOG_API_KEY
+          datadog-ci dora deployment --service shopist --env prod --started-at $deploy_start --finished-at $(date +%s)
 
