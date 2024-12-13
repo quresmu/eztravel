@@ -60,6 +60,6 @@ jobs:
       - name: Push deployment event to Datadog
         run: |
           deploy_start=$(date +%s)
-          datadog-ci dora deployment --service shopist --env prod --started-at $deploy_start --finished-at $(date +%s)
-          # datadog-ci dora deployment --started-at $deploy_start --finished-at $(date +%s)
+          datadog-ci dora deployment --service serverwithtest --env prod --started-at $deploy_start --finished-at $(date +%s)
+          # datadog-ci dora deployment --started-at $deploy_start --finished-at $(date +%s)    ssd
 
